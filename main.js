@@ -14,7 +14,7 @@ const untis = new WebUntisLib.WebUntisAnonymousAuth(
 untis
 	.login()
     .then(() => {
-        return untis.getTimetableFor(new Date(today.getFullYear(),today.getMonth(),today.getDay()),209, WebUntisLib.TYPES.CLASS);
+        return untis.getTimetableFor(new Date(today.getFullYear(),today.getMonth(),today.getDate()),209, WebUntisLib.TYPES.CLASS);
     })
 	.then(timetable => {
         let starttime=0;
