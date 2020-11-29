@@ -4,6 +4,7 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
+    "mariadb": "^2.5.1",
     "node-schedule": "^1.3.2",
     "telebot": "^1.4.1",
     "webuntis": "^1.13.2"

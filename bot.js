@@ -1,12 +1,13 @@
 const TeleBot =require("telebot");
 const config=require("./config");
 const axios = require('axios');
+const db=require("./database");
+
 
 const bot = new TeleBot({
     token: config.telebot_apikey,
     usePlugins: ['askUser']
 });
-
 
 bot.on(['/start','/hello'], msg => {
     const id=msg.from.id
@@ -96,9 +97,7 @@ bot.on('ask.webhook', (msg) => {
         axios.get(msg.text)
         }catch(e){console.log(e);}
         
-        //
-        //text in SQL database einfügen!
-        //
+        db.newUser([id,msg.from.first_name,msg.text,false])
         
         let replyMarkup = bot.keyboard([
             [bot.button('ja', 'ja'), bot.button('nein', 'nein')]
@@ -129,6 +128,9 @@ bot.on('ask.webhookcorrect', (msg) => {
 //Fächerauswahl
 
 //Aktivieren/deaktivieren
+//+webhooks bearbeiten
+
+// /start für bereits bekennt Nutzer hinzufügen
 
 
 /*

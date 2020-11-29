@@ -3,6 +3,7 @@ const axios = require('axios');
 var schedule = require('node-schedule');
 const config=require("./config");
 
+
 const my_lessons=["CH G2","D  G2","E  G2","PXE2","EK L2","IF G1","M  L2","MU G2","SW G2","SP G4","KR G4"]
 const today=new Date();
 
@@ -14,7 +15,7 @@ const untis = new WebUntisLib.WebUntisAnonymousAuth(
 untis
 	.login()
     .then(() => {
-        return untis.getTimetableFor(new Date(today.getFullYear(),today.getMonth(),today.getDay()),209, WebUntisLib.TYPES.CLASS);
+        return untis.getTimetableFor(new Date(today.getFullYear(),today.getMonth(),today.getDate()),209, WebUntisLib.TYPES.CLASS);
     })
 	.then(timetable => {
         let starttime=0;
