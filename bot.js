@@ -2,6 +2,7 @@ const TeleBot =require("telebot");
 const config=require("./config");
 const axios = require('axios');
 const db=require("./database");
+const untis=require("./untischeck");
 
 
 const bot = new TeleBot({
@@ -17,11 +18,11 @@ bot.on(['/start','/hello'], msg => {
             [bot.button('JA', 'ja'), bot.button('NEIN', 'nein')]
         ], {resize: true});
 
-        bot.sendMessage(id, "Zuerst eine Frage: Bist du Schüler*in auf dem\nMallincrodt-Gymnasium Dortmund?",{replyMarkup,ask: 'isMAllincrodt'});
+        bot.sendMessage(id, "Zuerst eine Frage: Bist du Schüler*in auf dem\nMallinckrodt-Gymnasium Dortmund?",{replyMarkup,ask: 'isMallincrodt'});
     },600,id)
 });
 
-bot.on('ask.isMAllincrodt', (msg) => {
+bot.on('ask.isMallincrodt', (msg) => {
 
     const id = msg.chat.id;
     var selection = msg.text;
@@ -42,10 +43,9 @@ bot.on('ask.isMAllincrodt', (msg) => {
 
         setTimeout((id) => {
             bot.sendMessage(id, "Du kannst diesem Bot nun stoppen.");
-            main(msg)
         },1000,id)
     } else{
-        bot.sendMessage(id, "😕 Bitte benutze du unteren Schaltflächen um zu antworten!",{ask: 'isMAllincrodt'});
+        bot.sendMessage(id, "😕 Bitte benutze du unteren Schaltflächen um zu antworten!",{ask: 'isMallincrodt'});
     }
 
 });
@@ -116,15 +116,32 @@ bot.on('ask.webhookcorrect', (msg) => {
 
     if(selection==="ja"){
         bot.sendMessage(id, "Dann sind wir schon fast fertig! 🥳",{replyMarkup: 'hide'});
+        setTimeout((id) => {
+            bot.sendMessage(id, "In welche Klasse/Stufe gehst du denn?",{ask: 'stufe'});
+        },1600,id)
 
     }else if(selection==="nein"){
-        bot.sendMessage(id, "😥 Dann ist wohl etwas schiefgelaufen! schua nochmal nach, ob der Webhook richtg war un sende ihn mir danach nochmals zu!",{ask: 'webhook',replyMarkup: 'hide'});
+        bot.sendMessage(id, "😥 Dann ist wohl etwas schiefgelaufen! Schau nochmal nach, ob der Webhook richtg war un sende ihn mir danach nochmals zu!",{ask: 'webhook',replyMarkup: 'hide'});
     } else{
         bot.sendMessage(id, "😕 Bitte benutze du unteren Schaltflächen um zu antworten!",{ask: 'webhookcorrect'});
     }
 
 });
 
+bot.on(['ask.stufe','/dev'], (msg) => {
+    const id = msg.chat.id;
+    var klasse = msg.text;
+    
+    untis.isClass(klasse,id)
+    .then((result)=>{
+        if(result){
+            bot.sendMessage(id, "So So, du bist also aus der "+klasse);
+        }else{
+            bot.sendMessage(id, "Ich konnte deine Klassse leider nicht finden!\nSchau bitte nochmal, ob du dich nicht vertippt hast!",{ask: 'stufe'});
+        }
+    })
+
+})
 //Fächerauswahl
 
 //Aktivieren/deaktivieren

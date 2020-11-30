@@ -13,7 +13,6 @@ module.exports.newUser =async function newUser(attributes){
     try {
         conn = await pool.getConnection();
         let isindb =await conn.query("SELECT * FROM untis.wecker_users WHERE chatID=?",attributes[0])
-        console.log(isindb);
         if(isindb[0]==undefined){
         await conn.query("INSERT INTO untis.wecker_users (chatID,name,webhook1,enabeled) VALUES (?,?,?,?);",attributes);
         } else{
@@ -25,4 +24,11 @@ module.exports.newUser =async function newUser(attributes){
     } finally {
 	    if (conn) return conn.end();
     }
+}
+
+module.exports.insertclass = async function insertclass(classID,chatID){
+    console.log(classID);
+    let conn;
+    conn = await pool.getConnection();
+    await conn.query("UPDATE untis.wecker_users SET klasse=? WHERE chatID=?;",[classID,chatID]);
 }
