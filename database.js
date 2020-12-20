@@ -27,8 +27,14 @@ module.exports.newUser =async function newUser(attributes){
 }
 
 module.exports.insertclass = async function insertclass(classID,chatID){
-    console.log(classID);
     let conn;
     conn = await pool.getConnection();
     await conn.query("UPDATE untis.wecker_users SET klasse=? WHERE chatID=?;",[classID,chatID]);
+}
+
+module.exports.getclasID = async function getclasID(chatID){
+    let conn;
+    conn = await pool.getConnection();
+    classID= await conn.query("SELECT klasse FROM untis.wecker_users WHERE chatID=?;",[chatID]);
+    return classID[0].klasse;
 }

@@ -87,7 +87,7 @@ bot.on('ask.firmware', (msg) => {
     }
 });
 
-bot.on('ask.webhook', (msg) => {
+bot.on(['ask.webhook','/dev'], (msg) => {
     const id = msg.chat.id;
     bot.sendMessage(id, "Ich werden Webhook jetzt testen!");
     setTimeout((id) => {
@@ -128,18 +128,40 @@ bot.on('ask.webhookcorrect', (msg) => {
 
 });
 
-bot.on(['ask.stufe','/dev'], (msg) => {
+bot.on('ask.stufe', (msg) => {
     const id = msg.chat.id;
     var klasse = msg.text;
-    
+    if(klasse.match(/^(EF|Q1|Q2)$/i)){
+        klasse=klasse.toUpperCase()
+    }else{
+        klasse=klasse.toLowerCase()
+    }
     untis.isClass(klasse,id)
     .then((result)=>{
         if(result){
             bot.sendMessage(id, "So So, du bist also aus der "+klasse);
+
+        setTimeout((id) => {
+            if(klasse.match(/^(EF|Q1|Q2)$/i)){
+                bot.sendMessage(id, "Dann muss ich dich noch nach deinen Kursen fragen!");
+
+                setTimeout((id) => {
+                    bot.sendMessage(id, "Bitte schreibe mir nun deine Kurse!\nBeachte folgendes:\n1. Du musst nur das Kürzel angeben (Deutsch=>D)\n2. Schreibe nach einem Leerzeichen den Kurstyp und die Nummer!\nDabei wird LK zu L und GK zu G\n3. Bitte schriebe jeden Kurs in eine eigene Nachicht!\n\n Eine Nachicht, für den Englich GK 1 sollte also nachher so aussehen;",{ask: 'oberstufen_kurse'});
+                    setTimeout((id) => {
+                        bot.sendMessage(id, "E G1",{ask: 'oberstufen_kurse'});
+                    },500,id)    
+                },1700,id)
+            } else{
+                bot.sendMessage(id, "Wieviele Minuten vor dem Untericht möchtest du denn geweckt werden?",{ask: 'weckerzeit'});
+            }
+        },900,id)
         }else{
             bot.sendMessage(id, "Ich konnte deine Klassse leider nicht finden!\nSchau bitte nochmal, ob du dich nicht vertippt hast!",{ask: 'stufe'});
         }
     })
+})
+
+bot.on('ask.oberstufen_kurse', (msg) => {
 
 })
 //Fächerauswahl

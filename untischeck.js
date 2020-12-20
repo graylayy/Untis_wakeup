@@ -25,3 +25,17 @@ module.exports.isClass= function isClass(klasse,chatID){
         })
     })
 }
+
+module.exports.isKurs = async function isKurs(chatID){
+    return new Promise(function(resolve, reject) {
+    let classID=db.getclasID(chatID);
+    untis
+	.login()
+    .then(() => {
+        return untis.getSubjects();
+    })
+    .then((subjects)=>{
+        console.log(subjects);
+    })
+    )}
+}
